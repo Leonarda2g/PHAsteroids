@@ -23,5 +23,6 @@ As you can see, while higher is the quantity of surrogates, higher is the probab
 ## Package To-Do List:
 Short-term Goals: 
 * Compare package-given positions with JPL data.
+
 Long-term Goals: 
 * Improve model accuracy. 
