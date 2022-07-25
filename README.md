@@ -1,7 +1,7 @@
 # PHAsteroids
 
 ## About the package
-`PHAsteroids` is a `Python3` package intended to predict the positions during time of the asteroids and to compare with NASA Jet Propulsion Laboratory data. A PHA (Potentially Hazardous Asteroid) is defined as an asteroid that has a probability of hitting the Earth of $\approx 10^{-6}$ (i.e. One in a million)
+`PHAsteroids` is a `Python3` package intended to predict the positions during time of the asteroids and to compare with NASA Jet Propulsion Laboratory data. A PHA (Potentially Hazardous Asteroid) is defined as an asteroid that has a probability of hitting the Earth of $\approx 10^{-6}$ (i.e. One in a million).
 
 The position of an asteroid can be modeled as an [Multivariate Normal Distribution](https://en.wikipedia.org/wiki/Multivariate_normal_distribution) of the orbital elements $(e,\space tp,\space\Omega,\space\omega,\space i)$ and their uncertainties (standard deviations). The purpose of the package is, given an asteroid (for example 2021EU as shown below) and a date, extract the distribution parameters $(\vec{\mu},\space\hat{\Sigma})$ predict the position of the asteroid at the given date, and compare with the data given by the NASA JPL (WIP).
 
@@ -19,3 +19,7 @@ According to CNEOS Sentry: Earth Impact Monitoring, 2021EU has a impact probabil
 </p>
 
 As you can see, while higher is the quantity of surrogates, higher is the probability of having at least one surrogate crossing the Earth's orbit and (almost) impacting it.
+
+## Package To-Do List:
+* Short-term Goals: Compare package-given positions with JPL data.
+* Long-term Goals: Improve model accuracy. 
