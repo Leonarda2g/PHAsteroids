@@ -1,8 +1,17 @@
-#!/usr/bin/env python
-# coding: utf-8
+#PHAsteroids
 
-# In[ ]:
+# This module contains all the data processing and physics referred
+#to an Asteroid
 
+from phasteroids import *
+
+import numpy as np
+import matplotlib.pyplot as plt
+import spiceypy as spy
+from urllib import request
+import json
+from collections import OrderedDict as odict
+from astropy.time import Time
 
 class Asteroid:
     """ Creates an object given an asteroid name.
@@ -21,7 +30,6 @@ class Asteroid:
         self.ID = ID
         if type(ID) is not str:
             raise ValueError(f"ID should be a string, specifically an asteroid name (EX: 2021EU), you passed {self.ID}")
-     
         html = request.urlopen(f"https://ssd-api.jpl.nasa.gov/sbdb.api?sstr={self.ID}&cov=mat")
         json_data = json.loads(html.read().decode())
         t0 = float(json_data["orbit"]["epoch"])
@@ -90,8 +98,8 @@ class Asteroid:
         Returns: 
                 np.array([x, y, z, vx, vy, vz]): Orbital State Vector (units = AU, AU/d)"""
     
-        html=request.urlopen(f"https://ssd-api.jpl.nasa.gov/sbdb.api?sstr={self.ID}&cov=mat")
-        json_data=json.loads(html.read().decode())
+        html = request.urlopen(f"https://ssd-api.jpl.nasa.gov/sbdb.api?sstr={self.ID}&cov=mat")
+        json_data = json.loads(html.read().decode())
     
         rad = 180/np.pi
         deg = 1/rad
@@ -125,7 +133,8 @@ class Asteroid:
     
         e = data[:,0]; q = data[:,1]; tp = data[:,2]
         node = data[:,3]; peri = data[:,4]; inc = data[:,5]
-
+        
+        spy.furnsh('naif0012.tls')
         t0 = float(json_data["orbit"]["epoch"])
         et0 = spy.unitim(t0, "JDTDB", "ET")
 
