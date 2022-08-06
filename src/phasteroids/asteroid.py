@@ -5,6 +5,7 @@
 
 from phasteroids import *
 
+#External dependencies
 import numpy as np
 import matplotlib.pyplot as plt
 import spiceypy as spy
@@ -67,9 +68,9 @@ class Asteroid:
         WARNING: The date also should be later than the asteroid's epoch. 
         Dates before the epoch will be useless."""
         
+        self.date = date
         if type(date) is not str:
             raise ValueError(f"date should be a string as YYYY-MM-DD HH:MM:SS , you passed {date}")
-        self.date = date
         
      
     #GET COVARIANCE

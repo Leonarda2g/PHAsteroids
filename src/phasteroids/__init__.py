@@ -1,7 +1,6 @@
-#!/usr/bin/env python
-# coding: utf-8
+#PHAsteroids
 
-# In[ ]:
+#__INIT__ MODULE
 
 from phasteroids.asteroid import *
-
+from phasteroids.body import *
