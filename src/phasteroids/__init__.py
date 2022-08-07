@@ -2,5 +2,5 @@
 
 #__INIT__ MODULE
 
+from phasteroids.bodyjpl import *
 from phasteroids.asteroid import *
-from phasteroids.body import *
