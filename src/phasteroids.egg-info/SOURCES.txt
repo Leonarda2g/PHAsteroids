@@ -2,7 +2,7 @@ README.md
 setup.py
 src/phasteroids/__init__.py
 src/phasteroids/asteroid.py
-src/phasteroids/body.py
+src/phasteroids/bodyjpl.py
 src/phasteroids.egg-info/PKG-INFO
 src/phasteroids.egg-info/SOURCES.txt
 src/phasteroids.egg-info/dependency_links.txt
