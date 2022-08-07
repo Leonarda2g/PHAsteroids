@@ -21,8 +21,6 @@ According to CNEOS Sentry: Earth Impact Monitoring, 2021EU has a impact probabil
 As you can see, while higher is the quantity of surrogates, higher is the probability of having at least one surrogate crossing the Earth's orbit and (almost) impacting it.
 
 ## Package To-Do List:
-Short-term Goals: 
-* Compare package-given positions with JPL data.
 
 Long-term Goals: 
 * Improve model accuracy. 
