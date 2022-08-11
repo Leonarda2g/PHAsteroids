@@ -101,16 +101,20 @@ class Asteroid(BodyJPL):
                             Default = 1
                             
         Returns: 
-                np.array([x, y, z, vx, vy, vz]): Orbital State Vector (units = AU, AU/d)"""
-    
+                np.array([x, y, z, vx, vy, vz]): Orbital State Vector 
+                                                 (units = AU, AU/d)"""
+        
+        self.Nsur = Nsur
         html=request.urlopen(f"https://ssd-api.jpl.nasa.gov/sbdb.api?sstr={self.ID}&cov=mat")
         json_data=json.loads(html.read().decode())
-    
+        
+        #Constants
         rad = 180/np.pi
         deg = 1/rad
         AU = 149597870.693 #km 
         mu = 132712440023.310 #km^3/s^2
-    
+        
+        #Save important data
         Cov = np.array(json_data["orbit"]["covariance"]["data"], dtype=float)
         Cov_label = json_data["orbit"]["covariance"]["labels"]
         t = float(json_data["orbit"]["epoch"])
@@ -133,6 +137,7 @@ class Asteroid(BodyJPL):
             means = [elements['e']['value'], elements['q']['value'], elements['tp']['value'],
                      elements['om']['value'], elements['w']['value'], elements['i']['value']]
         
+        #Applicates the multivariate normal distribution
         data = np.random.multivariate_normal(means, Cov, Nsur, check_valid='ignore')
     
     
@@ -142,7 +147,8 @@ class Asteroid(BodyJPL):
         
         t0 = float(json_data["orbit"]["epoch"])
         et0 = spy.unitim(t0, "JDTDB", "ET")
-
+        
+        #Calculation of remaining orbital elements
         a = (q/(1 - e))*AU
         n = np.sqrt(mu/a**3)
         tps = np.array([spy.unitim(t, "JDTDB", "ET") for t in tp])
@@ -163,7 +169,43 @@ class Asteroid(BodyJPL):
         return Ast
     
     def compare_positions(self):
+        """ Fetches from the JPL database the orbital state vector 
+            of the asteroid on the already set date.
+                
+            Returns:
+                np.array([x, y, z, vx, vy, vz]): Orbital State Vector calculated by the JPL
+                                                 (units = AU, AU/d)"""
+        
         self.bodytype = 2
         
         return super().get_jpl_positions(self)
+    
+    def plot(self, planet='Earth-Moon'):
+        """ Plots the surrogates with a reference planet
+            
+            Parameter:
+                Reference Planet (str): Planet with which to compare the positions 
+                                        of the asteroid surrogates.
+                                        Default = Earth-Moon
+            
+            Returns:
+                Plot of the planet and asteroid positions"""
         
+        #Gets the positions of the planet and the asteroid
+        name = planet
+        super().__init__(name, 1)
+        planet_rs = super().get_jpl_positions(self.date)[:2]
+        asteroid_rs = Asteroid.calculate_surrogates(self, self.Nsur)
+        asteroid_jpl = Asteroid.compare_positions(self)
+        
+        #Plotting
+        fig = plt.figure(figsize=(12,8))
+        ax = fig.add_subplot(111)
+        ax.scatter(planet_rs[0], planet_rs[1], marker="o", s=10**2, label=f"{name}")
+        ax.scatter(asteroid_jpl[0], asteroid_jpl[1], marker="*", s=6**2, label=f"Asteroid's JPL Position", c="k")
+        ax.set(title=f"Positions at {self.date} UTC", xlabel="X[AU]", ylabel="Y[AU]")
+        ax.scatter(asteroid_rs[:,0], asteroid_rs[:,1], s=2**2, c=np.random.rand(len(asteroid_rs),3))
+        plt.legend()
+        plt.grid()
+        
+        return plt.show()

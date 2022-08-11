@@ -46,7 +46,7 @@ class BodyJPL:
                 np.array([x, y, z, vx, vy, vz]): Orbital State Vector (units = AU, AU/d)"""
         
         if self.bodytype == 1:  
-            JPL = Horizons(id=f'{self.ID} Barycenter', 
+            JPL = Horizons(id=f'{self.name} Barycenter', 
                            location='@sun', 
                            epochs=Time(self.date).jd).vectors()
     
@@ -63,7 +63,7 @@ class BodyJPL:
             rt = np.array([JPL[c].value[0] for c in ["x", "y", "z", "vx", "vy", "vz"]])
      
         if self.bodytype == 3:
-            JPL = Horizons(id=f'{self.ID}', 
+            JPL = Horizons(id=f'{self.name}', 
                            location='@sun', 
                            epochs=Time(self.date).jd).vectors()
     

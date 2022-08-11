@@ -17,7 +17,7 @@ setuptools.setup(
     description="Potentially Hazardous Asteroids: Predicting positions.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version = '0.0.9',
+    version = '0.0.10',
     
     # ######################################################################
     # PACKAGE
