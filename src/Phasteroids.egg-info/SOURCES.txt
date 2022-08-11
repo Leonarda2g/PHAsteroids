@@ -1,0 +1,10 @@
+README.md
+setup.py
+src/Phasteroids.egg-info/PKG-INFO
+src/Phasteroids.egg-info/SOURCES.txt
+src/Phasteroids.egg-info/dependency_links.txt
+src/Phasteroids.egg-info/requires.txt
+src/Phasteroids.egg-info/top_level.txt
+src/phasteroids/__init__.py
+src/phasteroids/asteroid.py
+src/phasteroids/bodyjpl.py

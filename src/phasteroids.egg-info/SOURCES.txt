@@ -8,3 +8,4 @@ src/phasteroids.egg-info/SOURCES.txt
 src/phasteroids.egg-info/dependency_links.txt
 src/phasteroids.egg-info/requires.txt
 src/phasteroids.egg-info/top_level.txt
+src/phasteroids/data/naif0012.tls

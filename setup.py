@@ -17,18 +17,20 @@ setuptools.setup(
     description="Potentially Hazardous Asteroids: Predicting positions.",
     long_description=long_description,
     long_description_content_type="text/markdown",
+    version = '0.0.9',
     
     # ######################################################################
     # PACKAGE
     # ######################################################################
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
-    
+    include_package_data=True,
+    package_data={"": ["data/*"]},
     # ######################################################################
     # REQUIRED LIBRARIES
     # ######################################################################
     install_requires=[
-        'astroquery', 'ipython', 'matplotlib', 'numpy', 'astropy', 'spiceypy',
+        'ipython', 'matplotlib', 'numpy', 'astropy', 'spiceypy', 'astroquery',
     ],
 
 )

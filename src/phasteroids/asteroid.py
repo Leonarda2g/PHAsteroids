@@ -14,7 +14,9 @@ import json
 from collections import OrderedDict as odict
 from astropy.time import Time
 
-spy.furnsh('naif0012.tls')
+
+spy.furnsh(Files.get_data("naif0012.tls"))
+
 class Asteroid(BodyJPL):
     """ Creates an object given an asteroid name.
     
