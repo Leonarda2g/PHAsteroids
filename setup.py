@@ -12,12 +12,12 @@ setuptools.setup(
     # DESCRIPTION
     # ######################################################################
     name='phasteroids',
-    author="Leonard Gómez García",
+    author="Leonard Gómez García, Jorge I. Zuluaga",
     author_email="leonard.gomez@udea.edu.co",
     description="Potentially Hazardous Asteroids: Predicting positions.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version = '0.0.10',
+    version = '0.0.11',
     
     # ######################################################################
     # PACKAGE

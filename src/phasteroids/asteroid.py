@@ -24,12 +24,16 @@ class Asteroid(BodyJPL):
             ID (str): Name of the Asteroid in standard notation.
             
         Example: 
-            Ast = Asteroid('2008JL3')"""
+            Ast = Asteroid('2008JL3') 
+        
+    """
     
     def __init__(self, ID):
         
-        """Once you give an asteroide name, it will take the epoch data 
-        from the JPL Small-Body Database as the default date parameter"""
+        """ Once you give an asteroide name, it will take the epoch data 
+            from the JPL Small-Body Database as the default date parameter. 
+        
+        """
         
         self.ID = ID
         if type(ID) is not str:
@@ -46,11 +50,13 @@ class Asteroid(BodyJPL):
     #GET DATE
     def get_date(self):
         #Para darle utilidad al método es preferible agregarle un return con el formato que el usuario pida
-        """Useful for checking the ephemeris time 
-        before calculating the surrogates.
+        """ Useful for checking the ephemeris time 
+            before calculating the surrogates.
         
-        Returns:
-                Date in UTC format (str)"""
+            Returns:
+                Date in UTC format (str) 
+        
+        """
         
         return self.date
     
@@ -58,19 +64,21 @@ class Asteroid(BodyJPL):
     #SET DATE
     def set_date(self, date):
         
-        """Default parameter: Asteroid's epoch. 
-        Date should be a string in the UTC format.
-        
-        Parameter:
-            date (str): Date on which you want to calculate the surrogates
-                        in UTC format.
+        """ Default parameter: Asteroid's epoch. 
+            Date should be a string in the UTC format.
+            
+            Parameter:
+                date (str): Date on which you want to calculate 
+                            the surrogates in UTC format.
                         
-        Example: 
-            Asteroid.set_date('2020-01-01 00:00:00')
+            Example: 
+                Asteroid.set_date('2020-01-01 00:00:00')
         
         
-        WARNING: The date also should be later than the asteroid's epoch. 
-        Dates before the epoch will be useless."""
+            WARNING: The date also should be later than the asteroid's epoch. 
+                     Dates before the epoch will be useless. 
+        
+        """
         
         self.date = date
         if type(date) is not str:
@@ -80,8 +88,10 @@ class Asteroid(BodyJPL):
     #GET COVARIANCE
     def get_covariance(self): 
         
-        """Returns:
-                Covariance matrix of the asteroid. (Numpy Array)"""
+        """ Returns:
+                Covariance matrix of the asteroid. (Numpy Array) 
+        
+        """
         
         
         html = request.urlopen(f"https://ssd-api.jpl.nasa.gov/sbdb.api?sstr={self.ID}&cov=mat")
@@ -94,27 +104,26 @@ class Asteroid(BodyJPL):
     #CALCULATE SURROGATES POSITIONS
     def calculate_surrogates(self, Nsur=1):
         
-        """Given a quantity of surrogates you get the orbital state vector of each surrogate
+        """ Given a quantity of surrogates you get the orbital state vector of each surrogate.
         
-        Parameter: 
-                Nsur(int): Quantity of surrogates to be calculated. 
+            Parameter: 
+                Nsur (int): Quantity of surrogates to be calculated. 
                             Default = 1
                             
-        Returns: 
-                np.array([x, y, z, vx, vy, vz]): Orbital State Vector 
-                                                 (units = AU, AU/d)"""
+            Returns: 
+                np.array([x, y, z, vx, vy, vz]): Orbital State Vector (units = AU, AU/d)
+                
+        """
         
         self.Nsur = Nsur
-        html=request.urlopen(f"https://ssd-api.jpl.nasa.gov/sbdb.api?sstr={self.ID}&cov=mat")
-        json_data=json.loads(html.read().decode())
-        
-        #Constants
+        html = request.urlopen(f"https://ssd-api.jpl.nasa.gov/sbdb.api?sstr={self.ID}&cov=mat")
+        json_data = json.loads(html.read().decode())
+    
         rad = 180/np.pi
         deg = 1/rad
         AU = 149597870.693 #km 
         mu = 132712440023.310 #km^3/s^2
-        
-        #Save important data
+    
         Cov = np.array(json_data["orbit"]["covariance"]["data"], dtype=float)
         Cov_label = json_data["orbit"]["covariance"]["labels"]
         t = float(json_data["orbit"]["epoch"])
@@ -137,8 +146,7 @@ class Asteroid(BodyJPL):
             means = [elements['e']['value'], elements['q']['value'], elements['tp']['value'],
                      elements['om']['value'], elements['w']['value'], elements['i']['value']]
         
-        #Applicates the multivariate normal distribution
-        data = np.random.multivariate_normal(means, Cov, Nsur, check_valid='ignore')
+        data = np.random.multivariate_normal(means, Cov, self.Nsur, check_valid='ignore')
     
     
         e = data[:,0]; q = data[:,1]; tp = data[:,2]
@@ -147,12 +155,11 @@ class Asteroid(BodyJPL):
         
         t0 = float(json_data["orbit"]["epoch"])
         et0 = spy.unitim(t0, "JDTDB", "ET")
-        
-        #Calculation of remaining orbital elements
-        a = (q/(1 - e))*AU
+
+        a = (q / (1-e))*AU
         n = np.sqrt(mu/a**3)
         tps = np.array([spy.unitim(t, "JDTDB", "ET") for t in tp])
-        M = n*(et0 - tps)
+        M = n * (et0-tps)
         Ms = np.mod(M, 2*np.pi)
 
         E_date = f'{self.date} UTC'
@@ -169,17 +176,17 @@ class Asteroid(BodyJPL):
         return Ast
     
     def compare_positions(self):
-        """ Fetches from the JPL database the orbital state vector 
-            of the asteroid on the already set date.
-                
+        """ Tracks the position of the asteroid
+            From the JPL Small-Body Database
+            
             Returns:
-                np.array([x, y, z, vx, vy, vz]): Orbital State Vector calculated by the JPL
-                                                 (units = AU, AU/d)"""
-        
+                Posi"""
+            
+            
         self.bodytype = 2
         
         return super().get_jpl_positions(self)
-    
+        
     def plot(self, planet='Earth-Moon'):
         """ Plots the surrogates with a reference planet
             
@@ -191,14 +198,12 @@ class Asteroid(BodyJPL):
             Returns:
                 Plot of the planet and asteroid positions"""
         
-        #Gets the positions of the planet and the asteroid
         name = planet
         super().__init__(name, 1)
-        planet_rs = super().get_jpl_positions(self.date)[:2]
+        planet_rs = super().get_jpl_positions(self.date)[:3]
         asteroid_rs = Asteroid.calculate_surrogates(self, self.Nsur)
         asteroid_jpl = Asteroid.compare_positions(self)
         
-        #Plotting
         fig = plt.figure(figsize=(12,8))
         ax = fig.add_subplot(111)
         ax.scatter(planet_rs[0], planet_rs[1], marker="o", s=10**2, label=f"{name}")
@@ -209,3 +214,31 @@ class Asteroid(BodyJPL):
         plt.grid()
         
         return plt.show()
+
+    def count_approach(self, planet, r=1):
+        """ Given a planet to approach and a radius of approach
+            Returns the quantity of surrogates that will be inside
+            that radius around the planet at the given date.
+            
+            Parameters:
+                Planet(str):   Planet Name
+                
+                Radius(float): Radius around the Planet's position.
+                               Units = AU
+                               Default = 1 AU 
+            Returns:
+                Count(int):    Quantity of surrogates inside the radius
+                               around the planet at the given date.
+        """
+        
+        self.radius = r
+        name = planet
+        super().__init__(name, 1)
+        planet_rs = super().get_jpl_positions(self.date)[:3]
+        asteroid_rs = Asteroid.calculate_surrogates(self, self.Nsur)
+        
+        count = np.count_nonzero((asteroid_rs[:,0]-planet_rs[0])**2
+                                +(asteroid_rs[:,1]-planet_rs[1])**2
+                                +(asteroid_rs[:,2]-planet_rs[2])**2 <= r**2)
+        
+        return count
